@@ -1,0 +1,6 @@
+# Terraform working directory
+**/.terraform/
+
+# Local state files (may still exist temporarily)
+*.tfstate
+*.tfstate.*
