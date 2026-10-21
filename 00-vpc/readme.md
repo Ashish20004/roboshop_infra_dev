@@ -64,7 +64,7 @@ Before you run anything, make sure you have:
 | `private_subnet_cidrs` | List of CIDRs for private subnets | |
 | `database_subnet_cidrs` | List of CIDRs for database subnets | |
 
-> Update this table so it matches the variables in your `variables.tf`.
+
 
 ---
 
@@ -92,12 +92,12 @@ The networking resources come from a reusable module:
 
 ```hcl
 module "vpc" {
-  source = "<module-source-path-or-git-url>?ref=<version>"
+  source = "https://github.com/Ashish20004/terraform_aws_vpc.git"
   # inputs...
 }
 ```
 
-> Replace the source with your actual module location, and pin a version or tag so changes in the module never surprise you.
+
 
 ---
 
@@ -112,7 +112,7 @@ Once the VPC is built, its important IDs are saved in **AWS Systems Manager Para
 | `/roboshop/dev/private_subnet_ids` | Private subnet IDs |
 | `/roboshop/dev/database_subnet_ids` | Database subnet IDs |
 
-> Make sure these names match what your code actually creates.
+
 
 ### Using These Values in Another Component
 
@@ -154,14 +154,6 @@ The following values are also available as outputs, in case you want to referenc
 - `public_subnet_ids`
 - `private_subnet_ids`
 - `database_subnet_ids`
-
----
-
-## Known Limitations / TODO
-
-- Dev uses a **single NAT Gateway** to save cost. If that AZ goes down, private subnets lose outbound internet. For prod, use one NAT Gateway per AZ.
-- No VPC peering or VPN yet.
-- No VPC endpoints (S3, SSM) yet. Adding them would reduce NAT traffic and cost.
 
 ---
 
