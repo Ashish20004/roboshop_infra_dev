@@ -18,6 +18,12 @@ resource "aws_instance" "bastion" {
         local.common_tags
       )
     }
+    tags = merge(
+    {
+        Name = "${var.project}-${var.environment}-bastion"
+    },
+    local.common_tags
+  )
 }
 
 resource "aws_iam_role" "bastion" {
