@@ -16,3 +16,19 @@ mongodb:
   port: 27017
   src: user
   dest: mongodb
+- name: redis_user
+  port: 6379
+  src: user
+  dest: redis
+- name: redis_cart
+  port: 6379
+  src: cart
+  dest: redis
+- name: mysql_shipping
+  port: 3306
+  src: shipping
+  dest: mysql
+- name: rabbitmq_payment
+  port: 5679
+  src : payment
+  dest: rabbitmq

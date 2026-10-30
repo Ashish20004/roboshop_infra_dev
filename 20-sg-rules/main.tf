@@ -34,3 +34,39 @@ resource "aws_security_group_rule" "mongodb_user"{
     source_security_group_id= local.user_sg_id
     security_group_id       = local.mongodb_sg_id 
 }
+
+resource "aws_security_group_rule" "redis_user" {
+    type                    = "ingress"
+    from_port               = 6379
+    to_port                 = 6379
+    protocol                = "tcp"
+    source_security_group_id= local.user_sg_id
+    security_group_id       = local.redis_sg_id 
+}
+
+resource "aws_security_group_rule" "redis_cart"{
+    type                    = "ingress"
+    from_port               = 6379
+    to_port                 = 6379
+    protocol                = "tcp"
+    source_security_group_id= local.cart_sg_id
+    security_group_id       = local.redis_sg_id
+}
+
+resource "aws_security_group_rule" "mysql_shipping" {
+    type                    = "ingress"
+    from_port               = 3306
+    to_port                 = 3306
+    protocol                = "tcp"
+    source_security_group_id= local.shipping_sg_id
+    security_group_id       = local.mysql_sg_id
+}
+
+resource "aws_security_group_rule" "rabbitmq_payment" {
+    type                    = "ingress"
+    from_port               = 5672
+    to_port                 = 5672
+    protocol                = "tcp"
+    source_security_group_id= local.payment_sg_id
+    security_group_id       = local.rabbitmq_sg_id
+}
