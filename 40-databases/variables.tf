@@ -6,9 +6,9 @@ variable "environment" {
     default = "dev"
 }
 variable "zone_id" {
-    default = " "
+    default = "Z06050932A1HS6RQF8NS6"
 }
 
 variable "domain_name" {
-    default = ""
+    default = "devzone.fun"
 }
