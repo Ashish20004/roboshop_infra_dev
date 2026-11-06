@@ -157,3 +157,45 @@ resource "aws_autoscaling_group" "catalogue_asg" {
 
 }
 
+resource "aws_autoscaling_policy" "catalogue_asg_scale_up" {
+    autoscaling_group_name = aws_autoscaling_group.catalogue_asg.name
+    name                   = "${var.project}-${var.environment}-catalogue-asg-scale-up"
+    policy_type            = "TargetTrackingScaling"
+    estimated_instance_warmup = 120
+
+    target_tracking_configuration {
+        predefined_metric_specification {
+            predefined_metric_type  = "ASGAverageCPUUtilization"  
+        }
+        target_value = 70.0
+    }
+}
+
+resource "aws_lb_listener_rule" "catalogue_listner_rule" {
+    listener_arn = local.listener_arn
+    priority = 10
+
+    action {
+        type              = "forward"
+        target_group_arn = aws_lb_target_group.catalogue_tg.arn
+    }
+
+    condition {
+        host_header {
+            values = ["catalogue.backend-alb-${var.environment}-${var.domain_name}"]
+        }
+    }
+
+}
+
+resource "terraform_data" "catalogue_delete" {
+    triggers_replace = [
+        aws.instance.catalogue.id
+    ]
+    depends_on = [aws_autoscaling_policy.catalogue_asg_scale_up]
+
+    provisioner "local-exec" {
+        command = "aws ec2 terminate-instances --instance-ids ${aws_instance.catalogue.id} --region us-east-1"
+      
+    }
+}
