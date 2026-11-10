@@ -1,34 +1,203 @@
-bastion:
-- name: bastion_internet
+
+# -------------------------
+# Bastion Access
+# -------------------------
+
+- name: bastion_internet # Allow SSH from my laptop to Bastion
   port: 22
-  src: internet
+  src: my-public-ip
   dest: bastion
-mongodb:
-- name: mongodb_bastion
+
+# -------------------------
+# MongoDB
+# -------------------------
+
+- name: mongodb_bastion # Bastion can SSH into MongoDB
   port: 22
   src: bastion
   dest: mongodb
-- name: mongodb_catalogue # MongoDB accepting connections from Catalogue
+
+- name: mongodb_catalogue # Catalogue service can connect to MongoDB.MongoDB accepting connections from Catalogue
   port: 27017
   src: catalogue
   dest: mongodb
-- name: mongodb_user
+
+- name: mongodb_user # User service can connect to MongoDB
   port: 27017
   src: user
   dest: mongodb
-- name: redis_user
+
+# -------------------------
+# Redis
+# -------------------------
+
+- name: redis_bastion # Bastion can SSH into Redis
+  port: 22
+  src: bastion
+  dest: redis
+
+- name: redis_user # User service can connect to Redis
   port: 6379
   src: user
   dest: redis
-- name: redis_cart
+
+- name: redis_cart # Cart service can connect to Redis
   port: 6379
   src: cart
   dest: redis
-- name: mysql_shipping
+
+# -------------------------
+# MySQL
+# -------------------------
+
+- name: mysql_bastion # Bastion can SSH into MySQL
+  port: 22
+  src: bastion
+  dest: mysql
+
+- name: mysql_shipping # Shipping service can connect to MySQL
   port: 3306
   src: shipping
   dest: mysql
-- name: rabbitmq_payment
-  port: 5679
-  src : payment
+
+# -------------------------
+# RabbitMQ
+# -------------------------
+
+- name: rabbitmq_bastion # Bastion can SSH into RabbitMQ
+  port: 22
+  src: bastion
   dest: rabbitmq
+
+- name: rabbitmq_payment # Payment service can connect to RabbitMQ
+  port: 5672
+  src: payment
+  dest: rabbitmq
+
+# -------------------------
+# Catalogue Service
+# -------------------------
+
+- name: catalogue_bastion # Bastion can SSH into Catalogue service
+  port: 22
+  src: bastion
+  dest: catalogue
+
+- name: catalogue_backend_alb # Backend ALB can send requests to Catalogue
+  port: 8080
+  src: backend-alb
+  dest: catalogue
+
+# -------------------------
+# User Service
+# -------------------------
+
+- name: user_bastion # Bastion can SSH into User service
+  port: 22
+  src: bastion
+  dest: user
+
+- name: user_backend_alb # Backend ALB can send requests to User service
+  port: 8080
+  src: backend-alb
+  dest: user
+
+# -------------------------
+# Cart Service
+# -------------------------
+
+- name: cart_bastion # Bastion can SSH into Cart service
+  port: 22
+  src: bastion
+  dest: cart
+
+- name: cart_backend_alb # Backend ALB can send requests to Cart service
+  port: 8080
+  src: backend-alb
+  dest: cart
+
+# -------------------------
+# Shipping Service
+# -------------------------
+
+- name: shipping_bastion # Bastion can SSH into Shipping service
+  port: 22
+  src: bastion
+  dest: shipping
+
+- name: shipping_backend_alb # Backend ALB can send requests to Shipping service
+  port: 8080
+  src: backend-alb
+  dest: shipping
+
+# -------------------------
+# Payment Service
+# -------------------------
+
+- name: payment_bastion # Bastion can SSH into Payment service
+  port: 22
+  src: bastion
+  dest: payment
+
+- name: payment_backend_alb # Backend ALB can send requests to Payment service
+  port: 8080
+  src: backend-alb
+  dest: payment
+
+# -------------------------
+# Backend ALB
+# -------------------------
+
+- name: backend_alb_bastion # Bastion can access Backend ALB
+  port: 80
+  src: bastion
+  dest: backend-alb
+
+- name: backend_alb_catalogue # Catalogue service can access Backend ALB
+  port: 8080
+  src: catalogue
+  dest: backend-alb
+
+- name: backend_alb_user # User service can access Backend ALB
+  port: 8080
+  src: user
+  dest: backend-alb
+
+- name: backend_alb_cart # Cart service can access Backend ALB
+  port: 8080
+  src: cart
+  dest: backend-alb
+
+- name: backend_alb_shipping # Shipping service can access Backend ALB
+  port: 8080
+  src: shipping
+  dest: backend-alb
+
+- name: backend_alb_payment # Payment service can access Backend ALB
+  port: 8080
+  src: payment
+  dest: backend-alb
+
+# -------------------------
+# Frontend
+# -------------------------
+
+- name: frontend_bastion # Bastion can access Frontend server
+  port: 80
+  src: bastion
+  dest: frontend
+
+- name: frontend_frontend_alb # Frontend ALB can send requests to Frontend server
+  port: 80
+  src: frontend-alb
+  dest: frontend
+
+# -------------------------
+# Frontend ALB
+# -------------------------
+
+- name: frontend_alb_public # Internet users can access Frontend ALB over HTTPS
+  port: 443
+  src: internet
+  dest: frontend-alb
+```
