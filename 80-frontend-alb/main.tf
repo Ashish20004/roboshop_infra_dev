@@ -18,7 +18,7 @@ resource "aws_lb_listener" "http" {
     load_balancer_arn = aws_lb.frontend_alb.arn
     port              = "443"
     protocol          = "HTTPS"
-    ssl_policy        = "ELBSecurityPolicy-2016-01"
+    ssl_policy        = "ELBSecurityPolicy-2016-08" #cd roboshop_infra_dev
     certificate_arn   = local.frontend_alb_certificate_arn
 
     default_action {
